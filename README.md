@@ -5,7 +5,7 @@ Esta página presenta nuestro proyecto como parte de la materia de ***Sistemas I
 Este repositorio es para alojar el código de un ChatBot que da recomendaciones si te encuentras aburrido o desanimadoo quieres probar cosas nuevas, intenta interactuar con el.
 Equipo: 
 * Natalia Patiño
-* Mario Velázquez Vilchis
+* Mario Velázquez Vilchiz
 * Mario Rosas
 
 
