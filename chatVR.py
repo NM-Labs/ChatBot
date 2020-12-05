@@ -95,6 +95,351 @@ def contar_puntos(entrada):
   h.append('.')
   return h
 
+def escuchar_mensaje(w=False):
+    with SRG.Microphone() as s:
+        print('Estoy escuchando...')
+        entrada_audio = st.record(s, duration=5)
+        sys.stdout.write("\033[F")
+        try:
+            texto_salida = st.recognize_google(entrada_audio,language="es")
+            print(chr(27)+"[1;30m"+str(tunombre) +': \t' + texto_salida)
+        except:
+            print("No he podido escucharte, intenta de nuevo")
+    if w:
+        msg = texto_salida.capitalize() #w se usa para Wikipedia
+        msg = msg.split()
+    else:
+        msg = preparar_texto(texto_salida)
+    return msg
+
+
+# pregunta1 : msg = escuchar mensaje
+# msg = encontrar_en_lista(msg, ["entretenimiento","academico"])
+# switch_general[msg]
+# switch_general {
+#     "entretenimiento": entretenimiento()
+#         pregunta2 : msg = escuchar mensaje
+#         key = encontrar_en_lista(msg, OP_ENTRETENIMIENTO)
+#         switcher_entretenimiento[key]
+#             videos: funcionvideos
+#             2: peliculas
+#     "academico": academico()
+# }
+
+switch_general = {
+    "entretenimiento": entretenimiento(),
+    "academico": academico()
+}
+switcher_entretenimiento = {
+    "videos": videos(),
+    "peliculas": peliculas(),
+    "series": series(),
+    "musica": musica(),
+    "libros": libros(),
+    "videojuegos": juegos(),
+    "juegos": juegos()
+}
+switcher_academico = {
+    "articulos": articulos(),
+    "articulo": articulos(),
+    "investigadores": investigadores(),
+    "investigador": investigadores(),
+    "definicion": wikis(),
+    "definiciones": wikis(),
+}
+### Casos 1###
+def entretenimiento():
+    msg_salida = random.choice(["¿Que te gustaría de entretenimiento?, tengo\n", "Genial!, tengo estas categorías\n", "Muy bien, entretenimiento, podriamos empezar por: \n"])
+    categorias_entretenimiento = " - Videos\n - Películas\n - Series\n - Música\n - Libros"
+    msg_salida = msg_salida + categorias_entretenimiento
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    key = encontrar_en_lista(msg, OP_ENTRETENIMIENTO)
+    switcher_entretenimiento[key]
+    return
+
+
+def academico():
+    msg_salida = random.choice(["Tengo distintas recomendacioens académicas, algunas son:\n", "Genial!, tengo estas categorías\n", "Muy bien, el ámbito académico, podriamos empezar por: \n"])
+    categorias_academico = " - Artículos\n - Investigadores\n - Definiciones"
+    msg_salida = msg_salida + categorias_academico
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    key = encontrar_en_lista(msg, OP_ACADEMICO)
+    switcher_academico[key]
+    return
+
+### Caso 2 ###
+def videos():
+    msg_salida = random.choice(["¿Qué tipos de videos te gustarían?, tengo de:\n", "Genial!, tengo estas categorías:\n", "Muy bien, revisaré mi colección favorita de videos, podriamos empezar por: \n"])
+    opciones_videos = " - Comedia\n - Tecnología\n - Películas\n - Estilo\n - Entretenimiento\n - Blogs\n - Deportes\n - Activismo\n - Noticias\n - Gaiming\n - Educación\n - Animales\n - Autos\n - Viajes\n - Ciencia"
+    msg_salida = msg_salida + opciones_videos
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    name = encontrar_en_lista(msg, LEER_VIDEOS)
+    if name:
+        ran = np.random.randint(0,len(Videos[Videos['category']==NOMBRES_VIDEOS[name]]))
+        title = Videos[Videos['category']==NOMBRES_VIDEOS[name]][['title', 'video_id']]
+        msg_salida = (
+            'Si te gusta {} yo te recomendaría este vídeo "{}" , lo puedes ver en https://www.youtube.com/watch?v={}'.format(name,
+                title.iloc[ran][0], title.iloc[ran][1]))
+    else:
+        msg_salida = random.choice(DESCONOCIDO)
+
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+
+    return
+
+def peliculas():
+    msg_salida = random.choice(["¿Qué clase de películas te gustan?, tengo\n", "Genial!, tengo estas categorías\n", "Muy bien, entretenimiento, podriamos empezar por: \n"])
+    opciones_peliculas = " - documentales\n - accion\n - comedia\n - palomera\n - drama\n - terror\n - clasicos\n - ficcion\n - infantil"
+    msg_salida = msg_salida + opciones_peliculas
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    name = encontrar_en_lista(msg, LEER_PELIS)
+    if name:
+        select = random.choice(DIC_PELIS[name])
+        ran = np.random.randint(0,len(Netflix_p[Netflix_p['listed_in']==select]))
+        datos = Netflix_p[Netflix_p['listed_in']==select][['title', 'duration','description']].iloc[ran]
+        msg_salida = (
+            'Si te gusta la categoría de {} yo te recomendaría la película "{}", que dura {}, trata de: {}'.format(name,
+                datos[0], datos[1], datos[2]))
+    else:
+        msg_salida = random.choice(DESCONOCIDO)
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+
+    return
+
+def series():
+    msg_salida = random.choice(["¿Que te gustaría de entretenimiento?, tengo\n", "Genial!, tengo estas categorías\n", "Muy bien, entretenimiento, podriamos empezar por: \n"])
+    categorias_entretenimiento = " - Videos\n - Películas\n - Series\n - Música\n - Libros"
+    msg_salida = msg_salida + categorias_entretenimiento
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    name = encontrar_en_lista(msg, LEER_SERIES)
+    if name:
+        select = random.choice(DIC_SERIES[name])
+        ran = np.random.randint(0,len(Netflix_s[Netflix_s['listed_in']==select]))
+        datos = Netflix_s[Netflix_s['listed_in']==select][['title', 'duration','description']].iloc[ran]
+        msg_salida = (
+            'Si te gusta la categoría de {} yo te recomendaría la serie "{}", que tiene {}, trata de: {}'.format(name,
+                datos[0], datos[1], datos[2]))
+    else:
+        msg_salida = random.choice(DESCONOCIDO)
+
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+
+    return
+
+def musica():
+    msg_salida = random.choice(["¿Qué genero de música prefieres?, tengo\n", "Genial!, tengo estas categorías\n", "La música es genial!, podriamos empezar por: \n"])
+    categorias_entretenimiento = " - Videos\n - Películas\n - Series\n - Música\n - Libros"
+    msg_salida = msg_salida + categorias_entretenimiento
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    name = encontrar_en_lista(msg, LEER_MUSICA)
+    if name:
+        ran = np.random.randint(0,len(Musica[Musica['terms']==name]))
+        title = Musica[Musica['terms']==name][['release.name', 'artist.name']]
+        msg_salida = (
+            'Si te gusta el {} te recomiendo esta canción "{}" de {}'.format(name,
+                title.iloc[ran][0], title.iloc[ran][1]))
+    else:
+        msg_salida = random.choice(DESCONOCIDO)
+
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+
+    return
+
+def libros():
+    msg_salida = random.choice(["¿Qué tanto te gusta leer?, ¿mucho, poco?\n", "Genial!, podría sugerirte un libro corto, medianito o algo largo.\n", "Muy bien, libros, ¿qué tan grandes?: \n"])
+    categorias_entretenimiento = " - Videos\n - Películas\n - Series\n - Música\n - Libros"
+    msg_salida = msg_salida + categorias_entretenimiento
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    name = encontrar_en_lista(msg, LEER_LIBROS)
+    if name:
+        ran = np.random.randint(0,len(Libros[Libros['category']==DIC_LIBROS[name]]))
+        title = Libros[Libros['category']==DIC_LIBROS[name]][['title', 'authors', 'num_pages']]
+        msg_salida = (
+         'Este libro "{}" suena bien para ti, fue escrito por {} y tiene {} páginas.'.format(
+             title.iloc[ran][0], title.iloc[ran][1], title.iloc[ran][2]))
+    else:
+        msg_salida = random.choice(DESCONOCIDO)
+
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+
+    return
+
+def juegos():
+    msg_salida = random.choice(["¿Qué clase de videojugos te gustan?, ¿qué plataforma usas?\n", "Genial!, dime una categoría y plataforma.\n", "Muy bien, libros, ¿de qué tipo, qué consola?: \n"])
+    categorias_videojuegos = " Categorías:\t Consolas:\n - Acción\t + Xbox\n - Aventuras\t + PlayStation\n - Carreras\t + Wii\n - Deportes\t + Computadora\n - Disparos\n - Estrategia\n - Peleas\n - Plataforma\n - Roles\n - Rompecabezas\n - Simulacion\n - Variado"
+    msg_salida = msg_salida + categorias_videojuegos
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    keyp = encontrar_en_lista(msg, LEER_VJ_P)
+    keyg = encontrar_en_lista(msg, LEER_VJ_G)
+    if keyp and keyg:
+        Keyp = random.choice(DIC_VJ_P[keyp])
+        Keyg = DIC_VJ_G[keyg]
+        VJG = VJ[VJ['Genre'] == Keyg]
+        VJG = VJG[VJG['Platform'] == Keyp]
+        ran = np.random.randint(0,len(VJG))
+        datos = VJG[['Name','Genre', 'Platform']].iloc[ran]
+        msg_salida = (
+            'Si te gusta la categoría de {} yo te recomendaría "{}", para {}.'.format(keyg,
+                datos[0], datos[2]))
+    else:
+        msg_salida = "Hum... creo que no capté algo de lo que dijiste, ¿podrías repetirlo?"
+        print(chr(27)+"[1;36m"+'CHATBOT:')
+
+        for i in textwrap.wrap(str(msg_salida), 130):
+          print(chr(27)+"[1;36m"+ i)
+        juegos()
+
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+
+    return
+
+def articulos():
+    msg_salida = random.choice(["Me agrada que quieras descubrir conocimeinto, di una palabra clave (en inglés)\n", "Genial! dime una palabra clave (en inglés), para encontrar uno interesante\n", "Muy bien, busquemos uno interesante, dime una palabra clave que podria interesarte: \n"])
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    subartic = []
+
+    w = escuchar_mensaje(w=True)
+    print(chr(27)+"[1;36m"+'Buscando alguna coincidencia...')
+    subArtic = Artic[Artic['title'].str.contains(w)]
+    if subartic != []:
+        ran = np.random.randint(0,len(subArtic))
+        title = Artic[['title']].iloc[ran][0]
+        id = r[['id']].iloc[ran][0]
+        msg_salidas = (
+            'Un artículo relacionado a {} que encontré para ti: {}'.format(
+                w, title) +
+             ' Puedes leerlo completo en: https://arxiv.org/abs/{}'.format(
+                id)
+    else:
+        msg_salida = random.choice(DESCONOCIDO)
+
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    return
+
+def wikis():
+    msg_salida = random.choice(["¿Que te gustaría saber?, preguntame algún concepto\n", "Genial!, ¿te interesa saber la definición de algo en particular?\n", "Muy bien, podriamos empezar por algo que quieras saber... \n"])
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    w = escuchar_mensaje(w=True)
+    name = encontrar_en_lista(w, name_wikis)
+    if name:
+        ran = np.random.randint(0,len(Wikis[Wikis['Name']==name]))
+        title = Wikis[Wikis['Name']==name][['Name', 'WikiDescription','WikiUrl']]
+        msg_salidas = (
+            'Aquí esta la definición de {} que encontré para ti: {}'.format(
+                title.iloc[ran][0], lista_a_cadena(contar_puntos(title.iloc[ran][1]), '')) +
+             ' Puedes leer más de ello en: {}'.format(
+                title.iloc[ran][2]))
+    else:
+        msg_salida = random.choice(DESCONOCIDO)
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+      return
+
+def investigadores():
+    msg_salida = random.choice(["¿Que area del conocimeinto te agrada en este momento?, estas son:\n", "Genial!, las areas en las que podria encontrar a alguien son\n", "Muy bien, en que area estas interesado: \n"])
+    categorias_inv = " - Fisica, Matemáticas y Ciencias de la Tierra\n - Biología y Química\n - Medicina y Ciencias de la Salud\n - Humanidades y Ciencias de la Conducta\n - Ciencias Sociales\n - Biotecnología y Ciencias Agropecuarias\n - Ingenierias"
+    msg_salida = msg_salida + categorias_inv
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+    msg = escuchar_mensaje()
+    name = encontrar_en_lista(msg, Area_inv)
+    ran = np.random.randint(0,len(Inv[Inv['Área del Conocimiento']==Area_inv[name]]))
+    datos = Inv[Inv['Área del Conocimiento']==DIC_INV[name]][['Nombre Completo', 'Área del Conocimiento', 'Institución de Adscripción']].iloc[ran]
+    msg_salida = (
+        'Si te gusta el area de {} yo te recomendaría contactar o buscar el trabajo desarrollado por "{}", adscrito a {}'.format(datos[1], datos[0], datos[2])
+    if name == None:
+        msg_salida = random.choice(DESCONOCIDO)
+
+    print(chr(27)+"[1;36m"+'CHATBOT:')
+
+    for i in textwrap.wrap(str(msg_salida), 130):
+      print(chr(27)+"[1;36m"+ i)
+
+
+    return
+
 """# Librerias"""
 
 #!pip install covid
@@ -112,7 +457,7 @@ import sys
 
 st = SRG.Recognizer()
 
-"""# Información"""
+"""#Bases de Datos"""
 
 #!git clone https://github.com/ChatBotChallengeCdCMX/ChatBotForCovidDe-stress.git
 
@@ -136,22 +481,26 @@ name_wikis = list(pd.unique(Wikis['Name']))
 categorias_wikis = list(pd.unique(Wikis['Vertical1']))
 Artic = pd.read_csv('D:/Machine Learning Resources/Supervised/ChatBotForCovidDe-stress/BasesDeDatos/ArxivDataClean.csv')
 Artic = pd.DataFrame(Artic)
-keywords_artic = list(pd.unique(Artic['title']))
 VJ = pd.read_csv('D:/Machine Learning Resources/Supervised/ChatBotForCovidDe-stress/BasesDeDatos/VGClean.csv')
 VJ = pd.DataFrame(VJ)
-Gen_VG = list(pd.unique(VJ['Genre']))
-Consola_VG = list(pd.unique(VJ['Platform']))
+categorias_vj = list(pd.unique(VJ['Genre']))
+categorias2_vj = list(pd.unique(VJ['Platform']))
 Netflix = pd.read_csv('D:/Machine Learning Resources/Supervised/ChatBotForCovidDe-stress/BasesDeDatos/netflix_titlesClean.csv')
-Netflix = pd.DataFrame(Netflix)
+Netflix_p = pd.DataFrame(Netflix[Netflix['type']=='Movie'])
+categorias_netp = list(pd.unique(Netflix_p['listed_in']))
+Netflix_s = pd.DataFrame(Netflix[Netflix['type']=='TV Show'])
+categorias_nets = list(pd.unique(Netflix_s['listed_in']))
 Type_netflix = list(pd.unique(Netflix['type']))
 Inv = pd.read_csv('D:/Machine Learning Resources/Supervised/ChatBotForCovidDe-stress/BasesDeDatos/InvestigadoresSNIClean.csv')
 Inv = pd.DataFrame(Inv)
 Area_inv = list(pd.unique(Inv['Área del Conocimiento']))
 
 
-"""# Custom Chatbot"""
+"""# Listas de palabras frases y categorias"""
 
-# This cell defines a collection of input and salida things our chatbot can say and respond to
+OP_ENTRETENIMIENTO = ["videos", "peliculas", "series", "musica", "libros"]
+OP_ACADEMICO = ["videos", "peliculas", "series", "musica", "libros"]
+
 Saludos_ini = ['Hola! Soy MMN Bot, mi especialidad es dar recomendaciones! ¿Que tal va tu día?', 'Hola! ¿Qué tál te sientes hoy?', 'Que onda, soy MMN Bot! ¿Como te llamas?']
 SALUDOS = ['hello', 'hi', 'hey', 'hola', 'welcome', 'bonjour', 'greetings', 'que onda', 'holi']
 SALUDOS_RESP = ["Hola, es cool hablar contigo!", 'Gusto en conocerte!',  "Hey - ¡Vamos a platicar un poco!"]
@@ -175,6 +524,17 @@ NOMBRES_VIDEOS = dict(zip(LEER_VIDEOS, categorias_videos))
 
 #---NOMBRES_SERIES = dict(zip(LEER_SERIES, categorias_videos))
 
+LEER_INV = ['fisica','matematicas','tierra','biologia','quimica', 'medicina', 'salud', 'humanidades','conducta', 'sociales', 'biotecnologia','agropecuarias','ingenierias']
+DIC_INV = {'fisica': categorias_inv[4], 'matematicas': categorias_inv[4], 'tierra': categorias_inv[4], 'biologia':categorias_inv[1], 'quimica':categorias_inv[1], 'medicina':categorias_inv[3], 'salud': categorias_inv[3], 'humanidades':categorias_inv[6], 'conducta':categorias_inv[6], 'sociales':categorias_inv[2], 'biotecnologia':categorias_inv[0], 'agropecuarias':categorias_inv[0], 'ingenierias':categorias_inv[5]}
+
+LEER_PELIS = ['documentales','accion','comedia','palomera','drama', 'terror', 'clasicos', 'ficcion','infantil']
+DIC_PELIS = {'documentales': [categorias_netp[x] for x in [0,9,26,27]], 'accion':[categorias_netp[x] for x in [1,2,16,18,24,32]], 'comedia':[categorias_netp[x] for x in [3,4,6,11,13,14,28,31,34]],'palomera':[categorias_netp[x] for x in [5]], 'drama':[categorias_netp[x] for x in [7,8,15,21,23,25,33]],'terror':[categorias_netp[x] for x in [10,19,20]],'clasicos':[categorias_netp[x] for x in [12]],'ficcion':[categorias_netp[x] for x in [17]],'infantil':[categorias_netp[x] for x in [22,29,30]]}
+
+LEER_SERIES = ['crimen','novela','infantil','documentales','clasicos', 'reality']
+DIC_SERIES = {'crimen': [categorias_nets[x] for x in [0,5,7,9,12,14,19]], 'novela':[categorias_nets[x] for x in [1,3,4,8,11,16,15]], 'infantil':[categorias_nets[x] for x in [2,18]],'documentales':[categorias_nets[x] for x in [6,17]], 'clasicos':[categorias_nets[x] for x in [10,13]],'reality':[categorias_nets[x] for x in [20,21]]}
+
+LEER_VJ = ['xbox','360','one','play','station','playstation', 'wii', 'psp', 'computadora', 'compu', 'pc']
+DIC_VJ = {'xbox': [categorias2_vj[x] for x in [4,13,17]], '360': [categorias2_vj[x] for x in [4,13,17]],'one': [categorias2_vj[x] for x in [4,13,17]], 'playstation':[categorias2_vj[x] for x in [5,6,10,12,16]],'play':[categorias2_vj[x] for x in [5,6,10,12,16]],'station':[categorias2_vj[x] for x in [5,6,10,12,16]],'psp':[categorias2_vj[x] for x in [5,6,10,12,16]], 'wii':[categorias2_vj[x] for x in [0,19]],'computadora':[categorias2_vj[x] for x in [14]],'compu':[categorias2_vj[x] for x in [14]],'pc':[categorias2_vj[x] for x in [14]]}
 
 LEER_CATEGORIAS = ['libros', 'libro', 'musica', 'videos', 'video', 'si', 'leer']
 DIC_LIBROS = {'no me gusta tanto': 'short', 'poco': 'short', 'no tanto': 'short','casi no': 'short','mas o menos': 'medium', 'mucho': 'large',  'bastante': 'large','me encanta leer': 'large' }
@@ -213,7 +573,7 @@ def chatear():
     while chat:
         with SRG.Microphone() as s:
             print('Estoy escuchando...')
-            entrada_audio = st.record(s, duration=7)
+            entrada_audio = st.record(s, duration=5)
             sys.stdout.write("\033[F")
             try:
                 texto_salida = st.recognize_google(entrada_audio,language="es")
@@ -223,19 +583,26 @@ def chatear():
         if tunombre != None:
           msg = texto_salida#input(chr(27)+"[1;30m"+str(tunombre) +': \t') \\ chr(27)+"[1;30m"+str(tunombre) +': \t' + texto_salida
           print(chr(27)+"[1;30m"+str(tunombre) +': \t' + msg)
-        else: 
+        else:
           msg = texto_salida#input(chr(27)+"[1;30m"+'INPUT : \t')
           print(chr(27)+"[1;30m"+'INPUT : \t' + msg)
+          n = msg.upper()   # n sirve para la función de nombres
+          n = n.split()       # en lugar de la funcion preparar_texto
+          for i in n:
+            i = [i]
+            if esta_en_lista(i, LEER_NOMBRES):
+                tunombre = encontrar_en_lista(i, LEER_NOMBRES)
+                salidas.append(lista_a_cadena([tunombre.capitalize(),
+                                            selector(i, LEER_NOMBRES, DECIR_NOMBRES)], ' '))
+
 
         msg_salida = None
+        salidas = []
 
-        n = msg.upper()
-        n = n.split()
-
-        w = msg.capitalize()
+        w = msg.capitalize() #w se usa para Wikipedia
         w = w.split()
 
-        pregunta = es_pregunta(msg)
+        pregunta = es_pregunta(msg)  #Solo para el escrito
 
         msg = preparar_texto(msg)
 
@@ -243,21 +610,13 @@ def chatear():
             msg_salida = 'Adios!'
             chat = False
 
+            #Aquí empiezan los switch, casos.
 
         if not msg_salida:
-
-            salidas = []
 
             salidas.append(selector(msg, SALUDOS_RESP, SALUDOS_RESP))
 
             salidas.append(selector(msg, LEER_COMPU, DECIR_COMPU))
-
-            for i in n:
-              i = [i]
-              if esta_en_lista(i, LEER_NOMBRES):
-                  tunombre = encontrar_en_lista(i, LEER_NOMBRES)
-                  salidas.append(lista_a_cadena([tunombre.capitalize(),
-                                              selector(i, LEER_NOMBRES, DECIR_NOMBRES)], ' '))
 
             if esta_en_lista(msg, LEER_CIENT):
                 name = encontrar_en_lista(msg, LEER_CIENT)
