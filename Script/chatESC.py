@@ -211,21 +211,10 @@ def chatear():
     chat = True
     tunombre = None
     while chat:
-        with SRG.Microphone() as s:
-            print('Estoy escuchando...')
-            entrada_audio = st.record(s, duration=7)
-            sys.stdout.write("\033[F")
-            try:
-                texto_salida = st.recognize_google(entrada_audio,language="es")
-            except:
-                print("No he podido escucharte, intenta de nuevo")
-
-        if tunombre != None:
-          msg = texto_salida#input(chr(27)+"[1;30m"+str(tunombre) +': \t') \\ chr(27)+"[1;30m"+str(tunombre) +': \t' + texto_salida
-          print(chr(27)+"[1;30m"+str(tunombre) +': \t' + msg)
+         if tunombre != None:
+          msg = input(chr(27)+"[1;30m"+str(urname) +': \t')
         else: 
-          msg = texto_salida#input(chr(27)+"[1;30m"+'INPUT : \t')
-          print(chr(27)+"[1;30m"+'INPUT : \t' + msg)
+          msg = input(chr(27)+"[1;30m"+'INPUT : \t')
 
         msg_salida = None
 
