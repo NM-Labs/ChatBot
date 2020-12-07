@@ -195,7 +195,7 @@ def lista_a_cadena(lista_entrada, separador):
   return salida
 
 def terminar_chat(lista_entrada):
-  if 'adios' or 'no' in lista_entrada:
+  if 'no' in lista_entrada:
     salida = True
   else:
     salida = False
@@ -248,7 +248,7 @@ def creargrafica():
                      hover_name="country",              # identify hover name
                      animation_frame="variable",        # identify date column
                      projection="natural earth",        # select projection
-                     color_continuous_scale = 'Turbo',  # select prefer color scale
+                     color_continuous_scale = 'rainbow',  # select prefer color scale
                      range_color=[0,50000]              # select range of dataset
                      )
     os.remove("time_series_covid19_confirmed_global.csv")
@@ -276,7 +276,7 @@ def leer_mensaje(tunombre="INPUT", w=False):
 def videos(tunombre):
     msg_salida = None
     msg_salida = random.choice(["¿Qué tipos de videos te gustarían?, tengo de:\n", "Genial!, tengo estas categorías:\n", "Muy bien, revisaré mi colección favorita de videos, podríamos empezar por: \n"])
-    opciones_videos = " - Comedia\n - Tecnología\n - Películas\n - Estilo\n - Entretenimiento\n - Blogs\n - Deportes\n - Activismo\n - Noticias\n - Gaiming\n - Educación\n - Animales\n - Autos\n - Viajes\n - Ciencia"
+    opciones_videos = " - Comedia\n - Tecnología\n - Películas\n - Estilo\n - Entretenimiento\n - Blogs\n - Deportes\n - Activismo\n - Noticias\n - Gaiming\n - Educación\n - Animales\n - Autos\n - Viajes"
     # msg_salida = msg_salida + opciones_videos
     print(chr(27)+"[1;34m"+'CHATBOT:')
 
