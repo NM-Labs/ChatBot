@@ -198,13 +198,6 @@ def lista_a_cadena(lista_entrada, separador):
     salida = concatenar_string(salida, i, separador)
   return salida
 
-def terminar_chat(lista_entrada):
-  if 'adios' or 'no' in lista_entrada:
-    salida = True
-  else:
-    salida = False
-  return salida
-
 def esta_en_lista(lista_uno, lista_dos): #Checar si cualqueir elemento esta en dos listas.
 
     for elemento in lista_uno:
@@ -217,6 +210,13 @@ def encontrar_en_lista(lista_uno, lista_dos): # Find and return an element from 
         if elemento in lista_dos:
             return elemento
     return None
+
+def terminar_chat(lista_entrada):
+  if encontrar_en_lista(lista_entrada, ["no", "adios","nelson","bye","chao","vemos","nel"]):
+    salida = True
+  else:
+    salida = False
+  return salida
 
 def contar_puntos(entrada):
   p = 0
@@ -522,16 +522,17 @@ def articulos(tunombre):
     w = escuchar_mensaje(tunombre,w=True)
     print(chr(27)+"[1;34m"+'Buscando alguna coincidencia...')
     w = random.choice(w)
-    subArtic = Artic[Artic['title'].str.contains(w)]
-    # print(subArtic)
-    if subartic != None:
+    try:
+        subArtic = Artic[Artic['title'].str.contains(w)]
+        # print(subArtic)
+    #     if subartic != None:
         ran = np.random.randint(0,len(subArtic))
         title = Artic[['title']].iloc[ran][0]
         id = Artic[['id']].iloc[ran][0]
         msg_salida = (
             'Un artículo relacionado a {} que encontré para ti: {}'.format(w, GoogleTranslator(source='auto', target='es').translate(title)) +
              ' Puedes leerlo completo en: https://arxiv.org/abs/{}'.format(id))
-    else:
+    except:
         msg_salida = "Hum... creo que no capté algo de lo que dijiste, ¿podrías repetirlo?"
         print(chr(27)+"[1;34m"+'CHATBOT:')
         hablar(msg_salida)
