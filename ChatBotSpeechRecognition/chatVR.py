@@ -34,8 +34,13 @@ st = SRG.Recognizer()
 
 """#Bases de Datos"""
 def getDatos(path="/"):
-    #!git clone https://github.com/NM-Labs/ChatBot.git
-    # path = "home/"
+    global LEER_NOMBRES, DECIR_NOMBRES, OP_ENTRETENIMIENTO, OP_ACADEMICO, SALUDOS_IN, SALUDOS, SALUDOS_RESP, PREGUNTA_1, LEER_MUSICA, LEER_LIBROS, NOMBRES_LIBROS, LEER_VIDEOS, NOMBRES_VIDEOS, LEER_INV, LEER_PELIS, DIC_PELIS, DIC_INV, LEER_SERIES, DIC_SERIES, LEER_VJ_P, DIC_VJ_P, LEER_VJ_G, DIC_VJ_G, LEER_CATEGORIAS, LEER_COVID, LEER_COMPU, DECIR_COMPU, LEER_CIENT, NOMBRES_CIENT, DECIR_CIENT, LEER_BROMAS, DECIR_BROMAS, LEER_NEGACIONES, DECIR_NEGACIONES, NEGATIVAS, DESCONOCIDO, CHATEAR, RESP_PREG, Hombres, Mujeres, Nombres, Musica, categorias_musica, Videos, categorias_videos, Libros, categorias_libros, Wiki, Wikis, name_wikis, categorias_wikis, Artic, VJ, categorias_vj, categorias2_vj, Netflix, Netflix_p, categorias_netp, Netflix_s, categorias_nets, Type_netflix, Inv, categorias_inv, Area_inv 
+    
+
+        #!git clone https://github.com/NM-Labs/ChatBot.git
+    #     path = "D:/GitHub/"
+
+    # path = getDatos()
 
     Hombres = pd.read_csv(path +'ChatBot/BasesDeDatos/nombreshombres .csv')
     Mujeres = pd.read_csv(path+'ChatBot/BasesDeDatos/nombresmujeres.csv')
@@ -83,6 +88,7 @@ def getDatos(path="/"):
 
     PREGUNTA_1 = ["¿Qué quisieras que te recomendara, tengo la sección de entretenimiento, académico y covid", "Muy bien, continuemos! ¿Buscas algo académico, de entretenimiento o información sobre Covid?", "Me caes bien, puedo recomendarte algo académico, algo de entretenimiento o de Covid, ¿cuál prefieres?", "Sos la ostía, tengo para vosotros algo de entretenimiento, de covid o algo académico, elige..."]
 
+
     LEER_NOMBRES = Nombres
     DECIR_NOMBRES = ['gusto en conocerte,  vamoa platicar :D', 'esta bien curado tu nombre, es un gusto.', ", ese nombre mola!, es un gusto conocerte.",'Gusto en conocerte!' , "Hey - ¡Vamos a platicar un poco!"]
 
@@ -96,11 +102,7 @@ def getDatos(path="/"):
     LEER_VIDEOS = ['entretenimiento', 'peliculas', 'estilo', 'comedia', 'tecnologia', 'blogs', 'deportes','activismo', 'noticias', 'gaming', 'educacion', 'animales', 'autos', 'viajes', 'ciencia']
 
     NOMBRES_VIDEOS = dict(zip(LEER_VIDEOS, categorias_videos))
-    #NOMBRES_VIDEOS['science'] = NOMBRES_VIDEOS['tech']
-
-    #---LEER_SERIES = ['entretenimiento', 'peliculas', 'estilo', 'comedia', 'tecnología', 'blogs', 'deportes','activismo', 'noticias', 'gaming', 'educación', 'animales', 'autos', 'viajes', 'ciencia']
-
-    #---NOMBRES_SERIES = dict(zip(LEER_SERIES, categorias_videos))
+    NOMBRES_VIDEOS['ciencia'] = NOMBRES_VIDEOS['tecnologia']
 
     LEER_INV = ['fisica','matematicas','tierra','biologia','quimica', 'medicina', 'salud', 'humanidades','conducta', 'sociales', 'biotecnologia','agropecuarias','ingenierias']
     DIC_INV = {'fisica': categorias_inv[4], 'matematicas': categorias_inv[4], 'tierra': categorias_inv[4], 'biologia':categorias_inv[1], 'quimica':categorias_inv[1], 'medicina':categorias_inv[3], 'salud': categorias_inv[3], 'humanidades':categorias_inv[6], 'conducta':categorias_inv[6], 'sociales':categorias_inv[2], 'biotecnologia':categorias_inv[0], 'agropecuarias':categorias_inv[0], 'ingenierias':categorias_inv[5]}
@@ -145,7 +147,7 @@ def getDatos(path="/"):
 
     RESP_PREG = "Soy demasiado timido para a responder eso, jeje. De que otra cosa te gustaria una reomendación?"
 
-    return 
+#     return 
 ### Funciones ###
 
 def es_pregunta(entrada):
@@ -740,7 +742,7 @@ def general(tunombre):
         msg_salida = []
     return
 
-def chatear(path="/"):
+def chatear(path):
     """función principal para tener un chat."""
     getDatos(path)
     print(chr(27)+"[1;34m"+'Qué tál! Soy tu amigo MMN Bot! ¿Cuál es tu nombre?: \n')
