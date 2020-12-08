@@ -33,117 +33,119 @@ import os
 st = SRG.Recognizer()
 
 """#Bases de Datos"""
+def getDatos(path="/"):
+    #!git clone https://github.com/NM-Labs/ChatBot.git
+    # path = "home/"
 
-#!git clone https://github.com/NM-Labs/ChatBot.git
+    Hombres = pd.read_csv(path +'ChatBot/BasesDeDatos/nombreshombres .csv')
+    Mujeres = pd.read_csv(path+'ChatBot/BasesDeDatos/nombresmujeres.csv')
+    Hombres = list(Hombres.iloc[:,0])
+    Mujeres = list(Mujeres.iloc[:,0])
+    Nombres = Hombres + Mujeres
+    Musica = pd.read_csv(path +'ChatBot/BasesDeDatos/Music.csv')
+    Musica = pd.DataFrame(Musica)
+    categorias_musica = list(pd.unique(Musica['terms']))
+    Videos = pd.read_csv(path +'ChatBot/BasesDeDatos/YTVideos.csv')
+    Videos = pd.DataFrame(Videos)
+    categorias_videos = list(pd.unique(Videos['category']))
+    Libros = pd.read_csv(path +'ChatBot/BasesDeDatos/booksdataset.csv')
+    Libros = pd.DataFrame(Libros)
+    categorias_libros = list(pd.unique(Libros['category']))
+    Wiki = pd.read_csv(path +'ChatBot/BasesDeDatos/WIKI.csv')
+    Wikis = pd.DataFrame(Wiki)
+    name_wikis = list(pd.unique(Wikis['Name']))
+    categorias_wikis = list(pd.unique(Wikis['Vertical1']))
+    Artic = pd.read_csv(path +'ChatBot/BasesDeDatos/ArxivDataClean.csv')
+    Artic = pd.DataFrame(Artic)
+    VJ = pd.read_csv(path +'ChatBot/BasesDeDatos/VGClean.csv')
+    VJ = pd.DataFrame(VJ)
+    categorias_vj = list(pd.unique(VJ['Genre']))
+    categorias2_vj = list(pd.unique(VJ['Platform']))
+    Netflix = pd.read_csv(path +'ChatBot/BasesDeDatos/netflix_titlesClean.csv')
+    Netflix_p = pd.DataFrame(Netflix[Netflix['type']=='Movie'])
+    categorias_netp = list(pd.unique(Netflix_p['listed_in']))
+    Netflix_s = pd.DataFrame(Netflix[Netflix['type']=='TV Show'])
+    categorias_nets = list(pd.unique(Netflix_s['listed_in']))
+    Type_netflix = list(pd.unique(Netflix['type']))
+    Inv = pd.read_csv(path +'ChatBot/BasesDeDatos/InvestigadoresSNIClean.csv')
+    Inv = pd.DataFrame(Inv)
+    categorias_inv = list(pd.unique(Inv['Área del Conocimiento']))
+    Area_inv = list(pd.unique(Inv['Área del Conocimiento']))
 
-Hombres = pd.read_csv('../BasesDeDatos/nombreshombres .csv')
-Mujeres = pd.read_csv('../BasesDeDatos/nombresmujeres.csv')
-Hombres = list(Hombres.iloc[:,0])
-Mujeres = list(Mujeres.iloc[:,0])
-Nombres = Hombres + Mujeres
-Musica = pd.read_csv('../BasesDeDatos/Music.csv')
-Musica = pd.DataFrame(Musica)
-categorias_musica = list(pd.unique(Musica['terms']))
-Videos = pd.read_csv('../BasesDeDatos/YTVideos.csv')
-Videos = pd.DataFrame(Videos)
-categorias_videos = list(pd.unique(Videos['category']))
-Libros = pd.read_csv('../BasesDeDatos/booksdataset.csv')
-Libros = pd.DataFrame(Libros)
-categorias_libros = list(pd.unique(Libros['category']))
-Wiki = pd.read_csv('../BasesDeDatos/WIKI.csv')
-Wikis = pd.DataFrame(Wiki)
-name_wikis = list(pd.unique(Wikis['Name']))
-categorias_wikis = list(pd.unique(Wikis['Vertical1']))
-Artic = pd.read_csv('../BasesDeDatos/ArxivDataClean.csv')
-Artic = pd.DataFrame(Artic)
-VJ = pd.read_csv('../BasesDeDatos/VGClean.csv')
-VJ = pd.DataFrame(VJ)
-categorias_vj = list(pd.unique(VJ['Genre']))
-categorias2_vj = list(pd.unique(VJ['Platform']))
-Netflix = pd.read_csv('../BasesDeDatos/netflix_titlesClean.csv')
-Netflix_p = pd.DataFrame(Netflix[Netflix['type']=='Movie'])
-categorias_netp = list(pd.unique(Netflix_p['listed_in']))
-Netflix_s = pd.DataFrame(Netflix[Netflix['type']=='TV Show'])
-categorias_nets = list(pd.unique(Netflix_s['listed_in']))
-Type_netflix = list(pd.unique(Netflix['type']))
-Inv = pd.read_csv('../BasesDeDatos/InvestigadoresSNIClean.csv')
-Inv = pd.DataFrame(Inv)
-categorias_inv = list(pd.unique(Inv['Área del Conocimiento']))
-Area_inv = list(pd.unique(Inv['Área del Conocimiento']))
+    """# Listas de palabras frases y categorias"""
 
-"""# Listas de palabras frases y categorias"""
+    OP_ENTRETENIMIENTO = ["videos", "peliculas", "series", "musica", "libros","videojuegos","juegos"]
+    OP_ACADEMICO = ["articulo", "investigador", "investigadores", "articulos", "definiciones"]
 
-OP_ENTRETENIMIENTO = ["videos", "peliculas", "series", "musica", "libros","videojuegos","juegos"]
-OP_ACADEMICO = ["articulo", "investigador", "investigadores", "articulos", "definiciones"]
+    SALUDOS_IN = ['Hola! Soy MMN Bot, mi especialidad es dar recomendaciones! ¿Que tal va tu día?', 'Hola! ¿Qué tál te sientes hoy?', 'Que onda, soy MMN Bot! ¿Como te llamas?']
+    SALUDOS = ['hello', 'hi', 'hey', 'hola', 'welcome', 'bonjour', 'greetings', 'que onda', 'holi']
+    SALUDOS_RESP = ["Hola, es cool hablar contigo!", 'Gusto en conocerte!',  "Hey - ¡Vamos a platicar un poco!"]
 
-SALUDOS_IN = ['Hola! Soy MMN Bot, mi especialidad es dar recomendaciones! ¿Que tal va tu día?', 'Hola! ¿Qué tál te sientes hoy?', 'Que onda, soy MMN Bot! ¿Como te llamas?']
-SALUDOS = ['hello', 'hi', 'hey', 'hola', 'welcome', 'bonjour', 'greetings', 'que onda', 'holi']
-SALUDOS_RESP = ["Hola, es cool hablar contigo!", 'Gusto en conocerte!',  "Hey - ¡Vamos a platicar un poco!"]
+    PREGUNTA_1 = ["¿Qué quisieras que te recomendara, tengo la sección de entretenimiento, académico y covid", "Muy bien, continuemos! ¿Buscas algo académico, de entretenimiento o información sobre Covid?", "Me caes bien, puedo recomendarte algo académico, algo de entretenimiento o de Covid, ¿cuál prefieres?", "Sos la ostía, tengo para vosotros algo de entretenimiento, de covid o algo académico, elige..."]
 
-PREGUNTA_1 = ["¿Qué quisieras que te recomendara, tengo la sección de entretenimiento, académico y covid", "Muy bien, continuemos! ¿Buscas algo académico, de entretenimiento o información sobre Covid?", "Me caes bien, puedo recomendarte algo académico, algo de entretenimiento o de Covid, ¿cuál prefieres?", "Sos la ostía, tengo para vosotros algo de entretenimiento, de covid o algo académico, elige..."]
+    LEER_NOMBRES = Nombres
+    DECIR_NOMBRES = ['gusto en conocerte,  vamoa platicar :D', 'esta bien curado tu nombre, es un gusto.', ", ese nombre mola!, es un gusto conocerte.",'Gusto en conocerte!' , "Hey - ¡Vamos a platicar un poco!"]
 
-LEER_NOMBRES = Nombres
-DECIR_NOMBRES = ['gusto en conocerte,  vamoa platicar :D', 'esta bien curado tu nombre, es un gusto.', ", ese nombre mola!, es un gusto conocerte.",'Gusto en conocerte!' , "Hey - ¡Vamos a platicar un poco!"]
-
-LEER_MUSICA = categorias_musica
-
-
-LEER_LIBROS = ['no','poco', 'corto', 'medianito', 'menos', 'mucho', 'bastante', 'largo', 'encanta']
-
-NOMBRES_LIBROS = categorias_libros
-
-LEER_VIDEOS = ['entretenimiento', 'peliculas', 'estilo', 'comedia', 'tecnologia', 'blogs', 'deportes','activismo', 'noticias', 'gaming', 'educacion', 'animales', 'autos', 'viajes', 'ciencia']
-
-NOMBRES_VIDEOS = dict(zip(LEER_VIDEOS, categorias_videos))
-#NOMBRES_VIDEOS['science'] = NOMBRES_VIDEOS['tech']
-
-#---LEER_SERIES = ['entretenimiento', 'peliculas', 'estilo', 'comedia', 'tecnología', 'blogs', 'deportes','activismo', 'noticias', 'gaming', 'educación', 'animales', 'autos', 'viajes', 'ciencia']
-
-#---NOMBRES_SERIES = dict(zip(LEER_SERIES, categorias_videos))
-
-LEER_INV = ['fisica','matematicas','tierra','biologia','quimica', 'medicina', 'salud', 'humanidades','conducta', 'sociales', 'biotecnologia','agropecuarias','ingenierias']
-DIC_INV = {'fisica': categorias_inv[4], 'matematicas': categorias_inv[4], 'tierra': categorias_inv[4], 'biologia':categorias_inv[1], 'quimica':categorias_inv[1], 'medicina':categorias_inv[3], 'salud': categorias_inv[3], 'humanidades':categorias_inv[6], 'conducta':categorias_inv[6], 'sociales':categorias_inv[2], 'biotecnologia':categorias_inv[0], 'agropecuarias':categorias_inv[0], 'ingenierias':categorias_inv[5]}
-
-LEER_PELIS = ['documentales','accion','comedia','palomera','drama', 'terror', 'clasicos', 'ficcion','infantil']
-DIC_PELIS = {'documentales': [categorias_netp[x] for x in [0,9,26,27]], 'accion':[categorias_netp[x] for x in [1,2,16,18,24,32]], 'comedia':[categorias_netp[x] for x in [3,4,6,11,13,14,28,31,34]],'palomera':[categorias_netp[x] for x in [5]], 'drama':[categorias_netp[x] for x in [7,8,15,21,23,25,33]],'terror':[categorias_netp[x] for x in [10,19,20]],'clasicos':[categorias_netp[x] for x in [12]],'ficcion':[categorias_netp[x] for x in [17]],'infantil':[categorias_netp[x] for x in [22,29,30]]}
-
-LEER_SERIES = ['crimen','novela','infantil','documentales','clasicos', 'reality']
-DIC_SERIES = {'crimen': [categorias_nets[x] for x in [0,5,7,9,12,14,19]], 'novela':[categorias_nets[x] for x in [1,3,4,8,11,16,15]], 'infantil':[categorias_nets[x] for x in [2,18]],'documentales':[categorias_nets[x] for x in [6,17]], 'clasicos':[categorias_nets[x] for x in [10,13]],'reality':[categorias_nets[x] for x in [20,21]]}
-
-LEER_VJ_P = ['xbox','360','one','play','station','playstation', 'wii', 'psp', 'computadora', 'compu', 'pc']
-DIC_VJ_P = {'xbox': [categorias2_vj[x] for x in [4,13,17]], '360': [categorias2_vj[x] for x in [4,13,17]],'one': [categorias2_vj[x] for x in [4,13,17]], 'playstation':[categorias2_vj[x] for x in [5,6,10,12,16]],'play':[categorias2_vj[x] for x in [5,6,10,12,16]],'station':[categorias2_vj[x] for x in [5,6,10,12,16]],'psp':[categorias2_vj[x] for x in [5,6,10,12,16]], 'wii':[categorias2_vj[x] for x in [0,19]],'computadora':[categorias2_vj[x] for x in [14]],'compu':[categorias2_vj[x] for x in [14]],'pc':[categorias2_vj[x] for x in [14]]}
-LEER_VJ_G = ['deportes','plataforma','carreras','roles','rompecabezas','variado', 'disparos', 'simulacion', 'accion', 'peleas', 'aventura', "estrategia"]
-DIC_VJ_G = dict(zip(LEER_VJ_G, categorias_vj))
-
-LEER_CATEGORIAS = ['libros', 'libro', 'musica', 'videos', 'video', 'si', 'leer']
-DIC_LIBROS = {'no': 'short', 'poco': 'short', 'corto': 'short','medianito': 'medium','mediano': 'medium','menos': 'medium', 'mucho': 'large',  'bastante': 'large','encanta': 'large' ,'largo': 'large' }
-LEER_COVID = ['cuarentena', 'covid', 'coronavirus', 'encerramiento', 'd 19', 'sars', 'corona']
+    LEER_MUSICA = categorias_musica
 
 
-LEER_COMPU = ['python', 'código', 'computadora', 'algoritmo', ]
-DECIR_COMPU = ["Python es de lo que estoy hecho.", \
-            "¿Sabías que estoy hecho con código!?", \
-            "Las computadoras son mágicas", \
-            "¿Crees que podría pasar el Test de Turing?"]
+    LEER_LIBROS = ['no','poco', 'corto', 'medianito', 'menos', 'mucho', 'bastante', 'largo', 'encanta']
 
-LEER_CIENT = ['turing', 'hopper', 'neumann', 'lovelace']
-DECIR_CIENT = ['fue asombroso!', 'hizo muchas cosas importantes!', 'es alguien del que que valdria la pena saber mas :).']
-NOMBRES_CIENT = {'turing': 'Alan', 'hopper': 'Grace', 'neumann': 'John von', 'lovelace': 'Ada'}
+    NOMBRES_LIBROS = categorias_libros
 
-LEER_BROMAS = ['divertido', 'gracioso', 'ja', 'jaja', 'jajaja', 'xD']
-DECIR_BROMAS = ['ja!', 'jajaja!', 'XD', 'lol']
+    LEER_VIDEOS = ['entretenimiento', 'peliculas', 'estilo', 'comedia', 'tecnologia', 'blogs', 'deportes','activismo', 'noticias', 'gaming', 'educacion', 'animales', 'autos', 'viajes', 'ciencia']
 
-LEER_NEGACIONES = ['matlab', 'java', 'C++']
-DECIR_NEGACIONES = ["No, lo siento. :(, No me gustaria hablar por ahora de eso."]
+    NOMBRES_VIDEOS = dict(zip(LEER_VIDEOS, categorias_videos))
+    #NOMBRES_VIDEOS['science'] = NOMBRES_VIDEOS['tech']
 
-NEGATIVAS = ['no', "no no", 'nop', 'nunca', "negativo", "ninguno"]
+    #---LEER_SERIES = ['entretenimiento', 'peliculas', 'estilo', 'comedia', 'tecnología', 'blogs', 'deportes','activismo', 'noticias', 'gaming', 'educación', 'animales', 'autos', 'viajes', 'ciencia']
 
-DESCONOCIDO = ['Bien.', 'Okay', 'Mm?', 'Si!', 'bien...', 'Ñam', 'Hum']
-CHATEAR = ['¿Qué te gustaría hacer ahora?, puedo recomedarte algo de música, libros o algun video enretenido, ¿Cuál te gustaría?', 'Veamos, ¿Qué tipo de música te gusta?', '¿Quieres algo para relajarte?', 'Puedo buscar algo de buena música para ti,¿Qué genero te gusta?', 'Tengo algunos videos entretenidos!, escoge una categoría :D','¿Te gustan los videos? Tengo de diferentes categorías', 'además, tengo aqui algunos de mis libros favoritos, te gusta leer mucho, mas o menos, o solo un poco?',
-            '¿Sobre que debería buscar?']
+    #---NOMBRES_SERIES = dict(zip(LEER_SERIES, categorias_videos))
 
-RESP_PREG = "Soy demasiado timido para a responder eso, jeje. De que otra cosa te gustaria una reomendación?"
+    LEER_INV = ['fisica','matematicas','tierra','biologia','quimica', 'medicina', 'salud', 'humanidades','conducta', 'sociales', 'biotecnologia','agropecuarias','ingenierias']
+    DIC_INV = {'fisica': categorias_inv[4], 'matematicas': categorias_inv[4], 'tierra': categorias_inv[4], 'biologia':categorias_inv[1], 'quimica':categorias_inv[1], 'medicina':categorias_inv[3], 'salud': categorias_inv[3], 'humanidades':categorias_inv[6], 'conducta':categorias_inv[6], 'sociales':categorias_inv[2], 'biotecnologia':categorias_inv[0], 'agropecuarias':categorias_inv[0], 'ingenierias':categorias_inv[5]}
 
+    LEER_PELIS = ['documentales','accion','comedia','palomera','drama', 'terror', 'clasicos', 'ficcion','infantil']
+    DIC_PELIS = {'documentales': [categorias_netp[x] for x in [0,9,26,27]], 'accion':[categorias_netp[x] for x in [1,2,16,18,24,32]], 'comedia':[categorias_netp[x] for x in [3,4,6,11,13,14,28,31,34]],'palomera':[categorias_netp[x] for x in [5]], 'drama':[categorias_netp[x] for x in [7,8,15,21,23,25,33]],'terror':[categorias_netp[x] for x in [10,19,20]],'clasicos':[categorias_netp[x] for x in [12]],'ficcion':[categorias_netp[x] for x in [17]],'infantil':[categorias_netp[x] for x in [22,29,30]]}
+
+    LEER_SERIES = ['crimen','novela','infantil','documentales','clasicos', 'reality']
+    DIC_SERIES = {'crimen': [categorias_nets[x] for x in [0,5,7,9,12,14,19]], 'novela':[categorias_nets[x] for x in [1,3,4,8,11,16,15]], 'infantil':[categorias_nets[x] for x in [2,18]],'documentales':[categorias_nets[x] for x in [6,17]], 'clasicos':[categorias_nets[x] for x in [10,13]],'reality':[categorias_nets[x] for x in [20,21]]}
+
+    LEER_VJ_P = ['xbox','360','one','play','station','playstation', 'wii', 'psp', 'computadora', 'compu', 'pc']
+    DIC_VJ_P = {'xbox': [categorias2_vj[x] for x in [4,13,17]], '360': [categorias2_vj[x] for x in [4,13,17]],'one': [categorias2_vj[x] for x in [4,13,17]], 'playstation':[categorias2_vj[x] for x in [5,6,10,12,16]],'play':[categorias2_vj[x] for x in [5,6,10,12,16]],'station':[categorias2_vj[x] for x in [5,6,10,12,16]],'psp':[categorias2_vj[x] for x in [5,6,10,12,16]], 'wii':[categorias2_vj[x] for x in [0,19]],'computadora':[categorias2_vj[x] for x in [14]],'compu':[categorias2_vj[x] for x in [14]],'pc':[categorias2_vj[x] for x in [14]]}
+    LEER_VJ_G = ['deportes','plataforma','carreras','roles','rompecabezas','variado', 'disparos', 'simulacion', 'accion', 'peleas', 'aventura', "estrategia"]
+    DIC_VJ_G = dict(zip(LEER_VJ_G, categorias_vj))
+
+    LEER_CATEGORIAS = ['libros', 'libro', 'musica', 'videos', 'video', 'si', 'leer']
+    DIC_LIBROS = {'no': 'short', 'poco': 'short', 'corto': 'short','medianito': 'medium','mediano': 'medium','menos': 'medium', 'mucho': 'large',  'bastante': 'large','encanta': 'large' ,'largo': 'large' }
+    LEER_COVID = ['cuarentena', 'covid', 'coronavirus', 'encerramiento', 'd 19', 'sars', 'corona']
+
+
+    LEER_COMPU = ['python', 'código', 'computadora', 'algoritmo', ]
+    DECIR_COMPU = ["Python es de lo que estoy hecho.", \
+                "¿Sabías que estoy hecho con código!?", \
+                "Las computadoras son mágicas", \
+                "¿Crees que podría pasar el Test de Turing?"]
+
+    LEER_CIENT = ['turing', 'hopper', 'neumann', 'lovelace']
+    DECIR_CIENT = ['fue asombroso!', 'hizo muchas cosas importantes!', 'es alguien del que que valdria la pena saber mas :).']
+    NOMBRES_CIENT = {'turing': 'Alan', 'hopper': 'Grace', 'neumann': 'John von', 'lovelace': 'Ada'}
+
+    LEER_BROMAS = ['divertido', 'gracioso', 'ja', 'jaja', 'jajaja', 'xD']
+    DECIR_BROMAS = ['ja!', 'jajaja!', 'XD', 'lol']
+
+    LEER_NEGACIONES = ['matlab', 'java', 'C++']
+    DECIR_NEGACIONES = ["No, lo siento. :(, No me gustaria hablar por ahora de eso."]
+
+    NEGATIVAS = ['no', "no no", 'nop', 'nunca', "negativo", "ninguno"]
+
+    DESCONOCIDO = ['Bien.', 'Okay', 'Mm?', 'Si!', 'bien...', 'Ñam', 'Hum']
+    CHATEAR = ['¿Qué te gustaría hacer ahora?, puedo recomedarte algo de música, libros o algun video enretenido, ¿Cuál te gustaría?', 'Veamos, ¿Qué tipo de música te gusta?', '¿Quieres algo para relajarte?', 'Puedo buscar algo de buena música para ti,¿Qué genero te gusta?', 'Tengo algunos videos entretenidos!, escoge una categoría :D','¿Te gustan los videos? Tengo de diferentes categorías', 'además, tengo aqui algunos de mis libros favoritos, te gusta leer mucho, mas o menos, o solo un poco?',
+                '¿Sobre que debería buscar?']
+
+    RESP_PREG = "Soy demasiado timido para a responder eso, jeje. De que otra cosa te gustaria una reomendación?"
+
+    return 
 ### Funciones ###
 
 def es_pregunta(entrada):
@@ -217,6 +219,7 @@ def terminar_chat(lista_entrada):
   else:
     salida = False
   return salida
+
 
 def contar_puntos(entrada):
   p = 0
@@ -737,8 +740,9 @@ def general(tunombre):
         msg_salida = []
     return
 
-def chatear():
+def chatear(path="/"):
     """función principal para tener un chat."""
+    getDatos(path)
     print(chr(27)+"[1;34m"+'Qué tál! Soy tu amigo MMN Bot! ¿Cuál es tu nombre?: \n')
     hablar('Qué tál! Soy tu amigo MMN Bot! ¿Cuál es tu nombre?:')
     chat = True
