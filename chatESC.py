@@ -9,8 +9,6 @@ En este proyecto colaboraron:
 """
 ### Librerias ###
 
-#!pip install covid
-
 import string
 from covid import Covid
 import random
@@ -28,8 +26,6 @@ import wget
 import os
 
 """#Bases de Datos"""
-
-#!git clone https://github.com/ChatBotChallengeCdCMX/ChatBotForCovidDe-stress.git
 
 Hombres = pd.read_csv('BasesDeDatos/nombreshombres .csv')
 Mujeres = pd.read_csv('BasesDeDatos/nombresmujeres.csv')
@@ -91,11 +87,7 @@ NOMBRES_LIBROS = categorias_libros
 LEER_VIDEOS = ['entretenimiento', 'peliculas', 'estilo', 'comedia', 'tecnologia', 'blogs', 'deportes','activismo', 'noticias', 'gaming', 'educacion', 'animales', 'autos', 'viajes', 'ciencia']
 
 NOMBRES_VIDEOS = dict(zip(LEER_VIDEOS, categorias_videos))
-#NOMBRES_VIDEOS['science'] = NOMBRES_VIDEOS['tech']
-
-#---LEER_SERIES = ['entretenimiento', 'peliculas', 'estilo', 'comedia', 'tecnología', 'blogs', 'deportes','activismo', 'noticias', 'gaming', 'educación', 'animales', 'autos', 'viajes', 'ciencia']
-
-#---NOMBRES_SERIES = dict(zip(LEER_SERIES, categorias_videos))
+NOMBRES_VIDEOS['ciencia'] = NOMBRES_VIDEOS['tecnologia']
 
 LEER_INV = ['fisica','matematicas','tierra','biologia','quimica', 'medicina', 'salud', 'humanidades','conducta', 'sociales', 'biotecnologia','agropecuarias','ingenierias']
 DIC_INV = {'fisica': categorias_inv[4], 'matematicas': categorias_inv[4], 'tierra': categorias_inv[4], 'biologia':categorias_inv[1], 'quimica':categorias_inv[1], 'medicina':categorias_inv[3], 'salud': categorias_inv[3], 'humanidades':categorias_inv[6], 'conducta':categorias_inv[6], 'sociales':categorias_inv[2], 'biotecnologia':categorias_inv[0], 'agropecuarias':categorias_inv[0], 'ingenierias':categorias_inv[5]}
@@ -276,8 +268,8 @@ def leer_mensaje(tunombre="INPUT", w=False):
 def videos(tunombre):
     msg_salida = None
     msg_salida = random.choice(["¿Qué tipos de videos te gustarían?, tengo de:\n", "Genial!, tengo estas categorías:\n", "Muy bien, revisaré mi colección favorita de videos, podríamos empezar por: \n"])
-    opciones_videos = " - Comedia\n - Tecnología\n - Películas\n - Estilo\n - Entretenimiento\n - Blogs\n - Deportes\n - Activismo\n - Noticias\n - Gaiming\n - Educación\n - Animales\n - Autos\n - Viajes"
-    # msg_salida = msg_salida + opciones_videos
+    opciones_videos = " - Comedia\n - Tecnología\n - Películas\n - Estilo\n - Entretenimiento\n - Blogs\n - Deportes\n - Activismo\n - Noticias\n - Gaiming\n - Educación\n - Animales\n - Autos\n - Viajes\n - Ciencia"
+
     print(chr(27)+"[1;34m"+'CHATBOT:')
 
     for i in textwrap.wrap(str(msg_salida), 130):
